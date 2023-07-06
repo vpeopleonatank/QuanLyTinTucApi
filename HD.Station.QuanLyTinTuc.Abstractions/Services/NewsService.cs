@@ -18,4 +18,11 @@ public class NewsService : INewsService
 
       return new MultipleArticlesResponse(articlesDto, articles.Total);
     }
+
+    public async Task<SingleArticleResponse> GetArticle(ArticleGetQuery query)
+    {
+      var article = await _newsStore.GetArticle(query.Slug);
+
+      return new SingleArticleResponse(article.Map());
+    }
 }

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using HD.Station.QuanLyTinTuc.Abstractions.Helpers;
 using HD.Station.QuanLyTinTuc.Abstractions.Data;
 
@@ -21,7 +22,25 @@ public class ArticleDto
 
 }
 
+public class NewArticleDto
+{
+    public required string Title { get; set; }
+
+    public required string Description { get; set; }
+
+    public required string Body { get; set; }
+
+    public required string Topic { get; set; }
+
+    public Collection<string> TagList { get; set; } = new();
+}
+
+public record NewArticleRequest(NewArticleDto Article);
+
+public record SingleArticleResponse(ArticleDto Article);
 public record MultipleArticlesResponse(IEnumerable<ArticleDto> Articles, int ArticlesCount);
+
+public record ArticleGetQuery(string Slug);
 
 public class ArticlesListQuery : PagedQuery
 {
@@ -42,6 +61,7 @@ public static class ArticleMapper
         {
             Slug = article.Slug,
             Title = article.Title,
+            BannerImage = article.BannerImage,
             Description = article.Description,
             Body = article.Body,
             CreatedAt = article.CreatedAt,

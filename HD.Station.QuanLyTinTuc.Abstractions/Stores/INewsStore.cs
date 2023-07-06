@@ -7,4 +7,5 @@ namespace HD.Station.QuanLyTinTuc.Abstractions.Stores;
 public interface INewsStore
 {
   public Task<PagedResponse<Article>> GetArticles(ArticlesListQuery articlesListQuery);
+  public Task<Article> GetArticle(string slug);
 }

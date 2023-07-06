@@ -32,7 +32,7 @@ CREATE TABLE [Articles] (
   [Slug] nvarchar(255),
   [Title] nvarchar(255),
   [Description] nvarchar(255),
-  [Body] text,
+  [Body] ntext,
   [CreatedAt] datetime,
   [UpdatedAt] datetime
 )

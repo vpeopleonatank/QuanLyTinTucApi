@@ -29,4 +29,12 @@ public class NewsStore : INewsStore
         return articles;
     }
 
+    public async Task<Article> GetArticle(string slug)
+    {
+        var article = await _qlttDbContext.Articles
+            .FindAsync(x => x.Slug == slug);
+
+        return article;
+    }
+
 }
