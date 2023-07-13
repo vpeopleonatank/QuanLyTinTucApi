@@ -1,4 +1,6 @@
 using HD.Station.QuanLyTinTuc.Abstractions.Data;
+
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace HD.Station.QuanLyTinTuc.Abstractions.DTO;
@@ -14,6 +16,20 @@ public class CommentDTO
     public DateTime UpdatedAt { get; set; }
 
     public required ProfileDto Author { get; set; }
+}
+
+public class NewCommentDto
+{
+
+    public required string Body { get; set; }
+}
+
+public class CommentCreateValidator : AbstractValidator<NewCommentQuery>
+{
+    public CommentCreateValidator()
+    {
+        RuleFor(x => x.Comment.Body).NotNull().NotEmpty();
+    }
 }
 
 public static class CommentMapper
@@ -32,5 +48,10 @@ public static class CommentMapper
 }
 
 public record MultipleCommentsResponse(IEnumerable<CommentDTO> Comments);
+public record SingleCommentResponse(CommentDTO Comment);
 
 public record CommentsListQuery(string Slug);
+public record NewCommentQuery(string Slug, NewCommentDto Comment);
+public record NewCommentRequest(NewCommentDto Comment);
+
+public record DeleteCommentQuery(string Slug, int Id);

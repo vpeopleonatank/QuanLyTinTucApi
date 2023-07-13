@@ -8,6 +8,7 @@ namespace HD.Station.QuanLyTinTuc.Mvc.ApiController;
 
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "User and Authentication")]
 public class UserController : Controller
 {
     private readonly INewsService _newsService;

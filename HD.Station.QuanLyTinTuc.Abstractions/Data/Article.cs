@@ -1,7 +1,8 @@
-﻿
+﻿using HD.Station.QuanLyTinTuc.Abstractions.Abstractions;
+
 namespace HD.Station.QuanLyTinTuc.Abstractions.Data;
 
-public partial class Article
+public partial class Article : IAuditableEntity
 {
     public int ArticleId { get; set; }
 
@@ -19,11 +20,11 @@ public partial class Article
 
     public string? Body { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
-    public virtual List<ArticleTag> Tags => _tags;
+    public virtual IReadOnlyCollection<ArticleTag> Tags => _tags;
 
     public virtual User? Author { get; set; }
 

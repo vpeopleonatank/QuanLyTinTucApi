@@ -24,4 +24,7 @@ public interface INewsStore
     public Task<bool> isTopicNameExists(string topicName);
     public Task<IEnumerable<Comment>> GetCommentsByArticleId(int articleId);
   // public Task<ArticleDto> GetArticle(NewArticleRequest newArticleRequest);
+    public Task<CommentDTO> AddCommentToArticle(NewCommentQuery query, User user);
+    public Task<Comment> GetCommentByArticle(int commentId, int articleId);
+    public Task RemoveComment(Comment comment);
 }

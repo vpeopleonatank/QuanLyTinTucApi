@@ -5,6 +5,7 @@ namespace HD.Station.QuanLyTinTuc.SqlServer.Stores;
 
 public partial class QuanLyTinTucDbContext : DbContext
 {
+    private static readonly AuditableInterceptor AuditableInterceptor = new();
     public QuanLyTinTucDbContext()
     {
     }
@@ -26,6 +27,10 @@ public partial class QuanLyTinTucDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; } = null!;
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.AddInterceptors(AuditableInterceptor);
+    }
 //     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
 //         => optionsBuilder.UseSqlServer("Server=localhost;Database=QuanLyTinTuc;User Id=SA;Password=Sql_password;Trusted_Connection=False;TrustServerCertificate=True;MultipleActiveResultSets=true");

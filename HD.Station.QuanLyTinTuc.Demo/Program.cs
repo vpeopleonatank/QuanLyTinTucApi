@@ -20,6 +20,7 @@ builder.Services.AddDbContext<QuanLyTinTucDbContext>(options =>
 
 builder.Services.AddTransient<INewsStore, NewsStore>();
 builder.Services.AddTransient<INewsService, NewsService>();
+builder.Services.AddTransient<ICommentsService, CommentsService>();
 builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();

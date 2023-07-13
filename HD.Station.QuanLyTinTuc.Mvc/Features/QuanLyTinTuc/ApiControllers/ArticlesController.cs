@@ -8,11 +8,11 @@ namespace HD.Station.QuanLyTinTuc.Mvc.ApiController;
 
 [ApiController]
 [Route("api/[controller]")]
-
-public class QlttController : ControllerBase
+[ApiExplorerSettings(GroupName = "Articles")]
+public class ArticlesController : ControllerBase
 {
     private readonly INewsService _newService;
-    public QlttController(INewsService newsService)
+    public ArticlesController(INewsService newsService)
     {
         _newService = newsService;
     }
@@ -52,10 +52,10 @@ public class QlttController : ControllerBase
     }
 
     [Authorize(Roles = "Admin,Writer")]
-    [HttpDelete(Name = "DeleteArticle")]
-    public async Task DeleteArticle([FromBody] DeleteArticleRequest request)
+    [HttpDelete("{slug}", Name = "DeleteArticle")]
+    public async Task DeleteArticle(string slug)
     {
-        await _newService.RemoveArticle(request);
+        await _newService.RemoveArticle(new DeleteArticleRequest(slug));
     }
 
 }

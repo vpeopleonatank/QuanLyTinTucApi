@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace HD.Station.QuanLyTinTuc.Mvc.ApiController;
 
 [ApiController]
-[Route("api/article/{slug}/[controller]")]
-
+[Route("api/articles/{slug}/[controller]")]
+[ApiExplorerSettings(GroupName = "Comments")]
+[Authorize]
 public class CommentsController : ControllerBase
 {
     private readonly ICommentsService _commentsService;
@@ -17,9 +18,26 @@ public class CommentsController : ControllerBase
         _commentsService = commentsService;
     }
 
-    // [HttpGet("{slug}", Name = "GetArticleComments")]
-    // public async Task<MultipleCommentsResponse> List(string slug)
-    // {
-    //     
-    // }
+    [AllowAnonymous]
+    [HttpGet(Name = "GetArticleComments")]
+    public async Task<MultipleCommentsResponse> List(string slug)
+    {
+      var comments = await _commentsService.GetComments(new CommentsListQuery(slug));
+
+      return comments;
+    }
+
+    [HttpPost(Name = "CreateArticleComment")]
+    public async Task<SingleCommentResponse> Create(string slug, [FromBody] NewCommentRequest request)
+    {
+      var comment = await _commentsService.AddNewComment(new NewCommentQuery(slug, request.Comment));
+
+      return comment;
+    }
+
+    [HttpDelete("{commentId}", Name = "DeleteComment")]
+    public async Task Delete(string slug, int commentId)
+    {
+      await _commentsService.DeleteComment(new DeleteCommentQuery(slug, commentId));
+    }
 }

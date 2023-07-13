@@ -147,7 +147,7 @@ public class NewsStore : INewsStore
 
         return topic;
     }
-    
+
     public async Task<bool> isTopicNameExists(string topicName)
     {
         return await _qlttDbContext.Topics
@@ -159,7 +159,8 @@ public class NewsStore : INewsStore
     {
         return await _qlttDbContext.Articles
           .Include(x => x.Tags)
-          .FindAsync(x => x.Slug == slug); 
+          .ThenInclude(x => x.Tag)  // Tag field in Tags
+          .FindAsync(x => x.Slug == slug);
     }
 
     public async Task UpdateNewArticle(Article article)
@@ -184,5 +185,35 @@ public class NewsStore : INewsStore
             .ToListAsync();
 
         return comments;
+    }
+
+    public async Task<CommentDTO> AddCommentToArticle(NewCommentQuery query, User user)
+    {
+        var article = await FindArticleBySlug(query.Slug);
+        var comment = new Comment
+        {
+            CommentBody = query.Comment.Body,
+            Article = article,
+            Author = user
+        };
+
+        await _qlttDbContext.Comments.AddAsync(comment);
+        await _qlttDbContext.SaveChangesAsync();
+
+        return comment.Map(user);
+    }
+
+
+    public async Task<Comment> GetCommentByArticle(int commentId, int articleId)
+    {
+        return await _qlttDbContext.Comments.FindAsync(
+            x => x.CommentId == commentId && x.ArticleId == articleId
+            );
+    }
+
+    public async Task RemoveComment(Comment comment)
+    {
+        _qlttDbContext.Comments.Remove(comment);
+        await _qlttDbContext.SaveChangesAsync();
     }
 }
