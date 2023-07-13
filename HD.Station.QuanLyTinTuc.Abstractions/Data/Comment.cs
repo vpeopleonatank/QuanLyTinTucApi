@@ -9,9 +9,11 @@ public partial class Comment
 
     public int? UserId { get; set; }
 
-    public string? CommentBody { get; set; }
+    public required string CommentBody { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+
+    public virtual required User Author { get; set; }
 }

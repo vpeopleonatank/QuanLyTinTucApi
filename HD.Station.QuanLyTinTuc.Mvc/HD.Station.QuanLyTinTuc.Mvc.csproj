@@ -4,6 +4,10 @@
     <ProjectReference Include="..\HD.Station.QuanLyTinTuc.Abstractions\HD.Station.QuanLyTinTuc.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

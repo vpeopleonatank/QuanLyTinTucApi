@@ -36,9 +36,9 @@ public partial class QuanLyTinTucDbContext : DbContext
         {
             entity.HasKey(e => e.ArticleId);
 
-            entity.Property(e => e.ArticleId).ValueGeneratedNever();
+            // entity.Property(e => e.ArticleId).ValueGeneratedNever();
             entity.Property(e => e.BannerImage).HasMaxLength(255);
-            entity.Property(e => e.Body).HasColumnType("text");
+            entity.Property(e => e.Body).HasColumnType("ntext");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.Slug).HasMaxLength(255);
@@ -56,7 +56,7 @@ public partial class QuanLyTinTucDbContext : DbContext
             entity.ToTable("ArticleTag");
 
             entity.Property(e => e.ArticleTagId)
-                .ValueGeneratedNever()
+                // .ValueGeneratedNever()
                 .HasColumnName("ArticleTagId");
 
             entity.HasOne(d => d.Article).WithMany(p => p.Tags)
@@ -72,8 +72,8 @@ public partial class QuanLyTinTucDbContext : DbContext
 
             entity.ToTable("Comment");
 
-            entity.Property(e => e.CommentId).ValueGeneratedNever();
-            entity.Property(e => e.CommentBody).HasColumnType("text");
+            // entity.Property(e => e.CommentId).ValueGeneratedNever();
+            entity.Property(e => e.CommentBody).HasColumnType("ntext");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
         });
@@ -84,7 +84,7 @@ public partial class QuanLyTinTucDbContext : DbContext
 
             entity.ToTable("Tag");
 
-            entity.Property(e => e.TagId).ValueGeneratedNever();
+            // entity.Property(e => e.TagId).ValueGeneratedNever();
             entity.Property(e => e.TagName).HasMaxLength(255);
         });
 
@@ -94,7 +94,7 @@ public partial class QuanLyTinTucDbContext : DbContext
 
             entity.ToTable("Topic");
 
-            entity.Property(e => e.TopicId).ValueGeneratedNever();
+            // entity.Property(e => e.TopicId).ValueGeneratedNever();
             entity.Property(e => e.TopicName).HasMaxLength(100);
         });
 
@@ -102,13 +102,14 @@ public partial class QuanLyTinTucDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            // entity.Property(e => e.Id).ValueGeneratedNever(); // use ValueGeneratedNever result in IDENTITY_INSERT error
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.Image).HasMaxLength(255);
             entity.Property(e => e.Role).HasMaxLength(255);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             entity.Property(e => e.Username).HasMaxLength(255);
+            entity.Property(e => e.Password).HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

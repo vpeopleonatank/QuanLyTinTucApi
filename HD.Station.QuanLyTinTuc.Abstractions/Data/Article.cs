@@ -23,7 +23,31 @@ public partial class Article
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<ArticleTag> Tags { get; set; } = new List<ArticleTag>();
+    public virtual List<ArticleTag> Tags => _tags;
 
     public virtual User? Author { get; set; }
+
+    private readonly List<Comment> _comments = new();
+
+    private readonly List<ArticleTag> _tags = new();
+
+    public void AddTags(IEnumerable<Tag> existingTags, params string[] newTags)
+    {
+        _tags.AddRange(
+            newTags
+                .Where(x => !String.IsNullOrEmpty(x))
+                .Distinct()
+                .Select(x =>
+                {
+                    var tag = existingTags.FirstOrDefault(t => t.TagName == x);
+
+                    return new ArticleTag
+                    {
+                        Tag = tag ?? new Tag { TagName = x },
+                        Article = this
+                    };
+                })
+                .ToList()
+        );
+    }
 }
