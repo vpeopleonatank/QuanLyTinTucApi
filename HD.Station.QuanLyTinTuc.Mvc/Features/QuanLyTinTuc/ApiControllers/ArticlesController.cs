@@ -8,7 +8,7 @@ namespace HD.Station.QuanLyTinTuc.Mvc.ApiController;
 
 [ApiController]
 [Route("api/[controller]")]
-[ApiExplorerSettings(GroupName = "Articles")]
+// [ApiExplorerSettings(GroupName = "Articles")]
 public class ArticlesController : ControllerBase
 {
     private readonly INewsService _newService;

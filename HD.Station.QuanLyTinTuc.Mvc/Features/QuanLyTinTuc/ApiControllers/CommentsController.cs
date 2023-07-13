@@ -8,7 +8,7 @@ namespace HD.Station.QuanLyTinTuc.Mvc.ApiController;
 
 [ApiController]
 [Route("api/articles/{slug}/[controller]")]
-[ApiExplorerSettings(GroupName = "Comments")]
+// [ApiExplorerSettings(GroupName = "Comments")]
 [Authorize]
 public class CommentsController : ControllerBase
 {
