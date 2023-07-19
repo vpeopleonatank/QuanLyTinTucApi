@@ -8,9 +8,12 @@ public class UserDto
 
     public required string Username { get; set; }
 
+    public required string Role { get; set; }
+
     public string? Bio { get; set; }
 
     public string? Image { get; set; }
+
 
     public required string Token { get; set; }
 }
@@ -24,6 +27,7 @@ public static class UserMapper
             Email = user.Email,
             Token = jwtTokenGenerator.CreateToken(user),
             Username = user.Username,
+            Role = user.Role,
             Bio = user.Image!,
             Image = user.Image!,
         };

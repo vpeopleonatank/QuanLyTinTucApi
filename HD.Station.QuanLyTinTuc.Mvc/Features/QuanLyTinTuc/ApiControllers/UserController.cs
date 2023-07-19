@@ -18,6 +18,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<UserResponse>> Current()
     {
         return await _newsService.GetCurrentUser();

@@ -21,6 +21,7 @@ public class UsersController : Controller
     [HttpPost("register")]
     public async Task<ActionResult<UserResponse>> Register([FromBody] NewUserRequest newUserRequest, CancellationToken cancellationToken)
     {
+        newUserRequest.User.Role = "Subscriber";
         var userResponse = await _newsService.CreateNewUser(newUserRequest);
         return userResponse;
     }
