@@ -15,4 +15,5 @@ public interface INewsService
     public Task<TopicsResponse> GetTopics();
     public Task<NewTopicRequest> AddTopic(NewTopicRequest request);
     public Task<RemoveTopicResponse> RemoveTopic(string topicId);
+    public Task<NewTopicRequest> UpdateTopic(int topicId, NewTopicRequest request);
 }

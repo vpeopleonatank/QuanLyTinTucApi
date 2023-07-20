@@ -148,6 +148,19 @@ public class NewsStore : INewsStore
         return topic;
     }
 
+    public async Task<Topic?> FindTopicById(int topicId)
+    {
+        var topic = await _qlttDbContext.Topics.FindAsync(x => x.TopicId == topicId);
+
+        return topic;
+    }
+
+    public async Task UpdateTopic(Topic topic)
+    {
+        _qlttDbContext.Topics.Update(topic);
+        await _qlttDbContext.SaveChangesAsync();
+    }
+
     public async Task<bool> isTopicNameExists(string topicName)
     {
         return await _qlttDbContext.Topics

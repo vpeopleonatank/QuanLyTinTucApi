@@ -36,8 +36,17 @@ public class TopicController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
+    [HttpPut("{topicId}", Name = "UpdateTopics")]
+    public async Task<ActionResult<NewTopicRequest>> UpdateTopic(string topicId, [FromBody] NewTopicRequest request)
+    {
+        var topic = await _newService.UpdateTopic(Int32.Parse(topicId), request);
+
+        return topic;
+    }
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{topicId}", Name = "RemoveTopics")]
-    public async Task<ActionResult<RemoveTopicResponse>> RemoveTopic([FromQuery] string topicId)
+    public async Task<ActionResult<RemoveTopicResponse>> RemoveTopic(string topicId)
     {
         var topic = await _newService.RemoveTopic(topicId);
 

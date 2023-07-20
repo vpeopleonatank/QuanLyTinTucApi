@@ -195,4 +195,26 @@ public class NewsService : INewsService
 
         await _newsStore.RemoveArticle(article);
     }
+
+    public async Task<NewTopicRequest> UpdateTopic(int topicId, NewTopicRequest request)
+    {
+        var context = new ValidationContext<NewTopicRequest>(request);
+        var validationResult = await _newTopicValidator.ValidateAsync(context);
+        if (validationResult.Errors.Any())
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var topic = await _newsStore.FindTopicById(topicId);
+
+        if (topic != null && topic.TopicId != topicId)
+        {
+            throw new NotFoundException();
+        }
+        topic.TopicName = request.TopicName ?? topic.TopicName;
+        await _newsStore.UpdateTopic(topic);
+
+        return request;
+    }
+
 }

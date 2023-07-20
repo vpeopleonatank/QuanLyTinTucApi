@@ -27,4 +27,6 @@ public interface INewsStore
     public Task<CommentDTO> AddCommentToArticle(NewCommentQuery query, User user);
     public Task<Comment> GetCommentByArticle(int commentId, int articleId);
     public Task RemoveComment(Comment comment);
+    public Task<Topic?> FindTopicById(int topicId);
+    public Task UpdateTopic(Topic topic);
 }
