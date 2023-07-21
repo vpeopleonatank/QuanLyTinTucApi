@@ -168,12 +168,21 @@ public class NewsStore : INewsStore
           .AnyAsync();
     }
 
-    public async Task<Article> FindArticleBySlug(string slug)
+    public async Task<Article> FindArticleBySlug(string slug, bool isTagIncluded)
     {
-        return await _qlttDbContext.Articles
-          .Include(x => x.Tags)
-          .ThenInclude(x => x.Tag)  // Tag field in Tags
-          .FindAsync(x => x.Slug == slug);
+        IQueryable<Article> query;
+        if (isTagIncluded)
+        {
+            query = _qlttDbContext.Articles
+            .Include(x => x.Tags).ThenInclude(x => x.Tag);  // Tag field in Tags
+        }
+        else
+        {
+            query = _qlttDbContext.Articles
+            .Include(x => x.Tags);
+        }
+
+        return await query.FindAsync(x => x.Slug == slug);
     }
 
     public async Task UpdateNewArticle(Article article)
@@ -202,7 +211,7 @@ public class NewsStore : INewsStore
 
     public async Task<CommentDTO> AddCommentToArticle(NewCommentQuery query, User user)
     {
-        var article = await FindArticleBySlug(query.Slug);
+        var article = await FindArticleBySlug(query.Slug, true);
         var comment = new Comment
         {
             CommentBody = query.Comment.Body,
@@ -227,6 +236,15 @@ public class NewsStore : INewsStore
     public async Task RemoveComment(Comment comment)
     {
         _qlttDbContext.Comments.Remove(comment);
+        await _qlttDbContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveCommentsByArticleId(int articleId)
+    {
+        var comments = await _qlttDbContext.Comments
+          .Where(x => x.ArticleId == articleId)
+          .ToListAsync();
+        _qlttDbContext.Comments.RemoveRange(comments);
         await _qlttDbContext.SaveChangesAsync();
     }
 }

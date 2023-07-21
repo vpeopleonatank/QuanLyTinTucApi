@@ -16,7 +16,7 @@ public interface INewsStore
     public Task<Article> CreateNewArticle(Article article);
     public Task UpdateNewArticle(Article article);
     public Task RemoveArticle(Article article);
-    public Task<Article> FindArticleBySlug(string slug);
+    public Task<Article> FindArticleBySlug(string slug, bool isTagIncluded);
     public Task<List<Tag>> GetExistingTags(ICollection<string> tagList);
     public Task<List<Topic>> GetTopics();
     public Task<Topic> AddTopic(string topicName);
@@ -29,4 +29,6 @@ public interface INewsStore
     public Task RemoveComment(Comment comment);
     public Task<Topic?> FindTopicById(int topicId);
     public Task UpdateTopic(Topic topic);
+    public Task RemoveCommentsByArticleId(int articleId);
+
 }

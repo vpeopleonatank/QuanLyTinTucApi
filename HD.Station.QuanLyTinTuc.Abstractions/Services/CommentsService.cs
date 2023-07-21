@@ -25,7 +25,7 @@ public class CommentsService : ICommentsService
 
     public async Task<MultipleCommentsResponse> GetComments(CommentsListQuery request)
     {
-        var article = await _newsStore.FindArticleBySlug(request.Slug);
+        var article = await _newsStore.FindArticleBySlug(request.Slug, false);
 
         var comments = (await _newsStore.GetCommentsByArticleId(article.ArticleId))
 
@@ -50,7 +50,7 @@ public class CommentsService : ICommentsService
 
     public async Task DeleteComment(DeleteCommentQuery request)
     {
-        var article = await _newsStore.FindArticleBySlug(request.Slug);
+        var article = await _newsStore.FindArticleBySlug(request.Slug, false);
         var comment = await _newsStore.GetCommentByArticle(request.Id, article.ArticleId);
 
         if (article.UserId != _currentUser.User!.Id && comment.UserId != _currentUser.User!.Id)

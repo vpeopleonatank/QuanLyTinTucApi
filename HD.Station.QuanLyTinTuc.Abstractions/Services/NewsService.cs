@@ -51,7 +51,7 @@ public class NewsService : INewsService
 
     public async Task<SingleArticleResponse> GetArticle(ArticleGetQuery query)
     {
-        var article = await _newsStore.FindArticleBySlug(query.Slug);
+        var article = await _newsStore.FindArticleBySlug(query.Slug, true);
 
         return new SingleArticleResponse(article.Map());
     }
@@ -168,7 +168,7 @@ public class NewsService : INewsService
             throw new ValidationException(validationResult.Errors);
         }
 
-        var article = await _newsStore.FindArticleBySlug(request.Slug);
+        var article = await _newsStore.FindArticleBySlug(request.Slug, true);
 
         if (article.UserId != _currentUser.User!.Id)
         {
@@ -186,13 +186,13 @@ public class NewsService : INewsService
 
     public async Task RemoveArticle(DeleteArticleRequest request)
     {
-        var article = await _newsStore.FindArticleBySlug(request.Slug);
-
+        var article = await _newsStore.FindArticleBySlug(request.Slug, false);
         if (article.UserId != _currentUser.User!.Id)
         {
             throw new ForbiddenException();
         }
 
+        await _newsStore.RemoveCommentsByArticleId(article.ArticleId);
         await _newsStore.RemoveArticle(article);
     }
 
