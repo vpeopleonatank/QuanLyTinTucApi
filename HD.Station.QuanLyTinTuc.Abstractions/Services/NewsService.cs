@@ -110,6 +110,9 @@ public class NewsService : INewsService
         {
             throw new ValidationException(validationResult.Errors);
         }
+        string uniqueFileName = Guid.NewGuid().ToString() + "_.png";
+        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/", uniqueFileName);
+        request.Article.BannerImage.CopyTo(new FileStream(imagePath, FileMode.Create));
         var article = new Article
         {
             Title = request.Article.Title,
@@ -117,7 +120,8 @@ public class NewsService : INewsService
             Body = request.Article.Body,
             TopicId = request.Article.TopicId,
             Author = _currentUser.User!,
-            Slug = _slugifier.Generate(request.Article.Title)
+            Slug = _slugifier.Generate(request.Article.Title),
+            BannerImage = uniqueFileName
         };
         if (request.Article.TagList.Any())
         {
@@ -178,8 +182,21 @@ public class NewsService : INewsService
         article.Title = request.Article.Title ?? article.Title;
         article.Description = request.Article.Description ?? article.Description;
         article.Body = request.Article.Body ?? article.Body;
+        string oldBannerImgName = article.BannerImage!;
+
+        if (request.Article.BannerImage != null) {
+          string uniqueFileName = Guid.NewGuid().ToString() + "_.png";
+          var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/", uniqueFileName);
+          request.Article.BannerImage.CopyTo(new FileStream(imagePath, FileMode.Create));
+          article.BannerImage = uniqueFileName;
+        }
 
         await _newsStore.UpdateNewArticle(article);
+
+        if (request.Article.BannerImage != null && oldBannerImgName != null) {
+          var oldImgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/", oldBannerImgName);
+          File.Delete(oldImgPath);
+        }
 
         return new SingleArticleResponse(article.Map());
     }

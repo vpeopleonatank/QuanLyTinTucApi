@@ -35,7 +35,7 @@ public class ArticlesController : ControllerBase
 
     [Authorize(Roles = "Admin,Writer")]
     [HttpPost(Name = "CreateArticle")]
-    public async Task<ActionResult<SingleArticleResponse>> CreateArticle([FromBody] NewArticleRequest request)
+    public async Task<ActionResult<SingleArticleResponse>> CreateArticle([FromForm] NewArticleRequest request)
     {
         var article = await _newService.CreateArticle(request);
 
@@ -44,7 +44,7 @@ public class ArticlesController : ControllerBase
 
     [Authorize(Roles = "Admin,Writer")]
     [HttpPut(Name = "UpdateArticle")]
-    public async Task<ActionResult<SingleArticleResponse>> UpdateArticle([FromBody] UpdateArticleRequest request)
+    public async Task<ActionResult<SingleArticleResponse>> UpdateArticle([FromForm] UpdateArticleRequest request)
     {
         var article = await _newService.UpdateArticle(request);
 

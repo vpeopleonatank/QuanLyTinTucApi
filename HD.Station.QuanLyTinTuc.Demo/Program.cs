@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 
 using HD.Station.QuanLyTinTuc.SqlServer.Stores;
 using HD.Station.QuanLyTinTuc.Abstractions.Abstractions;
@@ -39,6 +41,7 @@ builder.Services.ConfigureOptions<JwtOptionsSetup>()
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
   ;
+builder.Services.AddDirectoryBrowser();
 
 var app = builder.Build();
 
@@ -57,10 +60,22 @@ app.UseCors(
 );
 
 app.UseHttpsRedirection();
+// app.UseStaticFiles();
+var fileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.WebRootPath, "images"));
+var requestPath = "/Images";
+
+// Enable displaying browser links.
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = fileProvider,
+    RequestPath = requestPath
+});
+
 
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 
 using (var scope = app.Services.CreateScope())

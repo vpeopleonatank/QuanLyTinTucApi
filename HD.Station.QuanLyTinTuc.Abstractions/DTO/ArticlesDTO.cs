@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using HD.Station.QuanLyTinTuc.Abstractions.Helpers;
 using HD.Station.QuanLyTinTuc.Abstractions.Abstractions;
 using HD.Station.QuanLyTinTuc.Abstractions.Data;
@@ -48,6 +49,8 @@ public class NewArticleDto
 
     public required int TopicId { get; set; }
 
+    public required IFormFile BannerImage { get; set; }
+
     public Collection<string> TagList { get; set; } = new();
 }
 
@@ -56,6 +59,7 @@ public class UpdateArticleDto
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? Body { get; set; }
+    public IFormFile? BannerImage { get; set; }
 }
 
 public class ArticleCreateValidator : AbstractValidator<NewArticleRequest>
@@ -66,6 +70,7 @@ public class ArticleCreateValidator : AbstractValidator<NewArticleRequest>
         RuleFor(x => x.Article.Title).NotNull().NotEmpty();
         RuleFor(x => x.Article.Description).NotNull().NotEmpty();
         RuleFor(x => x.Article.Body).NotNull().NotEmpty();
+        RuleFor(x => x.Article.BannerImage).NotNull().NotEmpty();
 
         RuleFor(x => x.Article.Title).MustAsync(
             async (title, cancellationToken) => 
@@ -82,6 +87,7 @@ public class ArticleUpdateValidator : AbstractValidator<UpdateArticleRequest>
         RuleFor(x => x.Article.Title).NotEmpty().When(x => x.Article.Title != null);
         RuleFor(x => x.Article.Description).NotEmpty().When(x => x.Article.Description != null);
         RuleFor(x => x.Article.Body).NotEmpty().When(x => x.Article.Body != null);
+        RuleFor(x => x.Article.BannerImage).NotEmpty().When(x => x.Article.BannerImage != null);
     }
 }
 
@@ -110,7 +116,7 @@ public static class ArticleMapper
         {
             Slug = article.Slug,
             Title = article.Title,
-            BannerImage = article.BannerImage,
+            BannerImage = "Images/" + article.BannerImage,
             Description = article.Description,
             Body = article.Body,
             CreatedAt = article.CreatedAt,
